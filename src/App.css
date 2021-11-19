@@ -1,0 +1,140 @@
+.App {
+  text-align: center;
+  
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.detail-question {
+  background-color: white;
+  padding: 30px 15px;
+}
+
+.detail-title {
+  background-color: white;
+}
+
+.question-item {
+  margin-bottom: 15px;
+}
+
+.number {
+  float: right;
+  padding-right: 0px;
+}
+
+body {
+  background-color: #D5DBDB;
+}
+
+.item {
+  border: solid 0px #03fcd3;
+  border-radius: 5px;
+  margin-bottom: 10px
+}
+.item:hover {
+  
+  opacity: 0.5;
+  border-width: 1px;
+  cursor: pointer;
+}
+
+.btnAdd {
+  float: right;
+}
+
+.item-level:hover, .item-level:visited {
+  border: solid gray;
+  cursor: pointer;
+
+}
+
+.item-level {
+  border-radius: 5px;
+}
+
+#a {
+  position: fixed;
+  float: right;
+  right: 0;
+  z-index: 1;
+  margin-top: 95px;
+}
+
+#header {
+  width: 100%;
+  position: fixed;
+  z-index: 99;
+}
+
+#leftCol {
+  position: fixed;
+  background-color: #DDD; 
+  font-size: 21px;
+  overflow-y: scroll;
+  top: 40px;
+  bottom: 0;
+}
+
+body .abc {
+  max-height: 89vh;
+  overflow-y: scroll;
+}
+
+.home {
+  width: 100%;
+  height: 92vh;
+  background-image: url("https://blog.moesif.com/images/posts/header/ten-api-product-manager-interview-questions.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home h1 {
+  color: white;
+  font-size: 60px;
+  font-weight: bold;
+  background-color: black;
+  opacity: 0.8;
+  height: 150px;
+  line-height: 150px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
