@@ -165,6 +165,7 @@ export default function AddEdit() {
           return JSON.parse(localStorage.getItem("questions"));
         });
         toast.success("Xóa thành công !");
+        reset()
       } else {
         toast.error("Xóa câu hỏi thất bại");
       }
