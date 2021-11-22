@@ -2,6 +2,8 @@ import { React, useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export default function AddEdit() {
   const levels = localStorage.getItem("levels")
@@ -9,15 +11,17 @@ export default function AddEdit() {
     : [];
   const idSelectLevel = parseInt(useParams().idLevel);
 
+  const schema = yup.object().shape({
+    questionContent: yup.string().max(50, "Vui lòng nhập nội dung câu hỏi ít hơn 50 ký tự"),
+    answerB: yup.string().max(30),
+    answerA: yup.string().max(30),
+    answerC: yup.string().max(30),
+    answerD: yup.string().max(30),
+  });
 
-  const {
-    register,
-    reset,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {}
+  const { register, reset, handleSubmit, setValue, formState: { errors } } = useForm({
+    defaultValues: {},
+    resolver: yupResolver(schema),
   });
 
   const [isEdit, setIsEdit] = useState(false);
@@ -68,14 +72,20 @@ export default function AddEdit() {
   // khi click nút add
   const handleClickAdd = () => {
     setIsEdit(false);
-    toast.info("Thêm mới câu hỏi")
+    toast.info("Thêm mới câu hỏi");
     reset();
   };
 
   // hàm khi click nút lưu
   const onHandleSubmit = (formValues) => {
-    
-    if(formValues.questionContent && formValues.answerA && formValues.answerB && formValues.answerC && formValues.answerD && formValues.correctAnswer){
+    if (
+      formValues.questionContent &&
+      formValues.answerA &&
+      formValues.answerB &&
+      formValues.answerC &&
+      formValues.answerD &&
+      formValues.correctAnswer
+    ) {
       toast.success("Thành công!");
       if (isEdit) {
         setData((prev) => {
@@ -142,28 +152,24 @@ export default function AddEdit() {
         });
       }
     } else {
-      toast.error("Vui lòng nhập đầy đủ thông tin")
+      toast.error("Vui lòng nhập đầy đủ thông tin");
     }
-    
   };
   // hàm khi click nút xóa
   const deleteQuestion = (indexQuestion) => {
-    if (indexQuestion) {
-
+    if (indexQuestion !== null && indexQuestion !== undefined) {
       if (window.confirm("Bạn có thực sự muốn xóa?")) {
         setData((prev) => {
-          toast.success("Xóa thành công !");
-          return prev.map((question, index) => {
-            return index !== indexQuestion ? question : prev.splice(index, 1);
-          });
-          
-        });
-        localStorage.setItem("questions", JSON.stringify(data));
+          const newData = prev.filter((item, index) => index !== indexQuestion);
+          localStorage.setItem("questions", JSON.stringify(newData));
           return JSON.parse(localStorage.getItem("questions"));
-        
+        });
+        toast.success("Xóa thành công !");
       } else {
         toast.error("Xóa câu hỏi thất bại");
       }
+    } else {
+      toast.error("Không thể xóa câu hỏi");
     }
   };
 
@@ -222,26 +228,29 @@ export default function AddEdit() {
                   >
                     <div className="position-absolute top-50 start-50 translate-middle">
                       <p>{index + 1}</p>
+
+                      {/* Nút xóa */}
                       <span
-                        style={{ width: "50px"}}
-                        onClick={() =>
+                        style={{ width: "50px" }}
+                        onClick={() => {
                           deleteQuestion(
                             data
                               .map((question) => question)
                               .indexOf(questionOfType[index])
-                          )
-                        }
+                          );
+                        }}
                       >
                         <i className="far fa-trash-alt"></i>
                       </span>
                     </div>
                   </div>
+
                   <div
                     className="p-2 bd-highlight bg-white"
                     style={{ width: "70%" }}
                     onClick={() => {
                       setIsEdit(true);
-                      toast.info("Chỉnh sửa câu hỏi số " + (index+1))
+                      toast.info("Chỉnh sửa câu hỏi số " + (index + 1));
                       setIndexSelectQuestion(
                         data
                           .map((question) => question)
@@ -283,6 +292,7 @@ export default function AddEdit() {
           <div className="col-10 bg-light p-3 " id="a">
             <form onSubmit={handleSubmit(onHandleSubmit)}>
               <label className="fw-bold">Câu hỏi: </label>
+              {errors.questionContent && (<p className="error">{errors.questionContent?.message}</p>)}
               <div className="form-floating p-3 bg-white border border-primary">
                 <textarea
                   className="form-control"
@@ -294,15 +304,23 @@ export default function AddEdit() {
                   }}
                   {...register("questionContent")}
                 ></textarea>
-                
               </div>
               <label className="fw-bold mt-4">Các lựa chọn:</label>
-              
+              {(errors.answerA ||
+                errors.answerB ||
+                errors.answerC ||
+                errors.answerD) && (
+                <p className="error">Vui lòng nhập đáp án ít hơn 30 ký tự</p>
+              )}
+
               <div className="row">
                 {currentQuestion?.answers.map((answer) => (
-                  <div className="form-floating col-6 mb-3" key={answer.id}>
+                  <div
+                    className="form-answer form-floating col-6 mb-3"
+                    key={answer.id}
+                  >
                     <input
-                      className="form-check-input"
+                      className="form-check-input radio-answer"
                       type="radio"
                       name="correctAnswer"
                       {...register("correctAnswer")}
@@ -313,7 +331,6 @@ export default function AddEdit() {
                       style={{ height: "90px", resize: "none" }}
                       {...register(`answer${answer.id}`)}
                     ></textarea>
-                    
                   </div>
                 ))}
               </div>

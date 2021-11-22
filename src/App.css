@@ -138,3 +138,17 @@ body .abc {
   padding-left: 30px;
   padding-right: 30px;
 }
+
+.form-answer {
+  position: relative;
+}
+
+.radio-answer {
+  position: absolute;
+  left: 3%;
+  top: 10%;
+}
+
+.list-answer {
+  display: flex;
+}

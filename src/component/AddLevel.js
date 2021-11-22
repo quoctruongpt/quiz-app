@@ -11,6 +11,7 @@ export default function AddLevel() {
   );
   const idSelectLevel = parseInt(useParams().idLevel);
   const indexLevel = levels.map((e) => e.id).indexOf(idSelectLevel);
+
   const {
     register,
     reset,
@@ -24,31 +25,35 @@ export default function AddLevel() {
   }
   const onHandleSubmit = (formValues) => {
     if (formValues.type) {
-      if (idSelectLevel === 200000) {
-        setLevels((prev) => {
-          const newLevels = [
-            ...prev,
-            { id: Math.floor(Math.random() * 100000), type: formValues.type },
-          ];
-          localStorage.setItem("levels", JSON.stringify(newLevels));
-          return JSON.parse(localStorage.getItem("levels"));
-        });
-        reset();
-        toast.success("Thêm thành công!");
-      } else {
-        setLevels((prev) => {
-          const newLevels = prev.map((level, index) => {
-            return index !== indexLevel
-              ? level
-              : {
-                  ...level,
-                  type: formValues.type,
-                };
+      if (formValues.type.length <= 50) {
+        if (idSelectLevel === 200000) {
+          setLevels((prev) => {
+            const newLevels = [
+              ...prev,
+              { id: Math.floor(Math.random() * 100000), type: formValues.type },
+            ];
+            localStorage.setItem("levels", JSON.stringify(newLevels));
+            return JSON.parse(localStorage.getItem("levels"));
           });
-          localStorage.setItem("levels", JSON.stringify(newLevels));
-          return JSON.parse(localStorage.getItem("levels"));
-        });
-        toast.success("Sửa thành công!");
+          reset();
+          toast.success("Thêm thành công!");
+        } else {
+          setLevels((prev) => {
+            const newLevels = prev.map((level, index) => {
+              return index !== indexLevel
+                ? level
+                : {
+                    ...level,
+                    type: formValues.type,
+                  };
+            });
+            localStorage.setItem("levels", JSON.stringify(newLevels));
+            return JSON.parse(localStorage.getItem("levels"));
+          });
+          toast.success("Sửa thành công!");
+        }
+      } else {
+        toast.error("Vui lòng nhập ít hơn 50 ký tự");
       }
     } else {
       toast.error("Vui lòng nhập đầy đủ thông tin!");

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import "../App.css";
 
 export default function Detail() {
-  const [levels, setLevels] = useState(localStorage.getItem('levels') ? JSON.parse(localStorage.getItem("levels")) : []);
+  const [levels] = useState(localStorage.getItem('levels') ? JSON.parse(localStorage.getItem("levels")) : []);
   const questions = localStorage.getItem('questions') ? JSON.parse(localStorage.getItem("questions")) : [];
   const idSelectLevel = parseInt(useParams().idLevel);
   const questionsType = questions.filter(
@@ -26,12 +26,12 @@ export default function Detail() {
                     <div className="col-11">
                       <div className="detail-question">
                         <p className="fw-bold">{question.questionContent}</p>
-                        <div className="list-answer row">
+                        <div className="list-answer">
                           {question.answers.map((answer) => (
                             <div className="col-md-3" key={answer.id}>
                               <button
                                 type="button"
-                                className="btn btn-outline-primary btn-lg w-100 disabled"
+                                className="btn btn-outline-primary btn-lg disabled"
                               >
                                 {answer.value}
                               </button>
@@ -41,12 +41,12 @@ export default function Detail() {
                         <p className="text-primary fw-bold pt-5">
                           Câu trả lời đúng là:
                         </p>
-                        <div className="list-answer row">
+                        <div className="list-answer">
                           {question.answers.map((answer, index) => (
                             <div className="col-md-3" key={index}>
                               <button
                                 type="button"
-                                className="btn btn-outline-primary btn-lg w-100 disabled"
+                                className="btn btn-outline-primary btn-lg disabled overflow-auto"
                                 style={
                                   question.correctAnswer === answer.id
                                     ? {
@@ -72,7 +72,7 @@ export default function Detail() {
         <div className="col-md-4">
           <div className="detail-title p-2">
             <Link to={`/add-level/${idSelectLevel}`}>
-            <div className="border border-primary p-5 text-center text-primary fw-bold fs-3">
+            <div className="border border-primary p-5 text-center text-primary fw-bold fs-3 overflow-hidden">
               {levels[levels.map((e) => e.id).indexOf(idSelectLevel)].type}
               <span>
                 <i className="fas fa-edit ms-2 "></i>
